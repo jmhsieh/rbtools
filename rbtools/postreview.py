@@ -2285,8 +2285,11 @@ class GitClient(SCMClient):
         upstream_branch = options.tracking or default_upstream_branch or \
                           'origin/master'
         upstream_remote = upstream_branch.split('/')[0]
-        origin_url = execute(["git", "config", "remote.%s.url" % upstream_remote],
-                         ignore_errors=ignore_errors)
+        if options.repository_url:
+            origin_url = options.repository_url
+        else:
+            origin_url = execute(["git", "config", "remote.%s.url" % upstream_remote],
+                                 ignore_errors=ignore_errors)
 
         return (upstream_branch, origin_url.rstrip('\n'))
 
